@@ -1510,6 +1510,12 @@ function dailyTaskReset(){
 /* =========================================================
 INIT
 ========================================================= */
+  const LINK_VERSION = "v1";
+if (localStorage.getItem("linkVersion") !== LINK_VERSION) {
+  ["scheduleLink","studyLink","examLink","documentLink","soundcloudLink"]
+    .forEach(k => localStorage.removeItem(k));
+  localStorage.setItem("linkVersion", LINK_VERSION);
+}
 dailyTaskReset();
 
 createPomodoroControls();
