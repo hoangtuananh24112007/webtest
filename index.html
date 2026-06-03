@@ -1,341 +1,401 @@
-
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>V7 GOD MODE Productivity OS</title>
-
+  <title>HTA07 ✿</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet"/>
-
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Pacifico&display=swap" rel="stylesheet"/>
   <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      font-family:'Inter',sans-serif;
+    :root {
+      --peach:      #FFCBA4;
+      --peach-soft: #FFE4D0;
+      --peach-deep: #F4956A;
+      --pink:       #FFB7C5;
+      --pink-soft:  #FFE0E8;
+      --pink-deep:  #E8698A;
+      --cream:      #FFF8F2;
+      --cream2:     #FFF0E6;
+      --blossom:    #F9D7E3;
+      --text:       #6B3A50;
+      --text-light: #B07090;
+      --white:      #FFFFFF;
+      --shadow:     rgba(240,140,140,0.15);
+      --border:     rgba(255,180,180,0.35);
     }
 
-    html,body{
-      min-height:100%;
-      scroll-behavior:smooth;
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html, body { min-height:100%; scroll-behavior:smooth; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      position: relative;
+      overflow-x: hidden;
     }
 
-    body{
-      background:
-        radial-gradient(circle at top right,#312e81 0%,transparent 30%),
-        radial-gradient(circle at bottom left,#581c87 0%,transparent 25%),
-        linear-gradient(135deg,#020617,#0f172a,#111827,#1e1b4b);
-      color:white;
-      min-height:100vh;
-      display:flex;
+    /* ── Sakura petal decoration ── */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -60px; right: -60px;
+      width: 320px; height: 320px;
+      background: radial-gradient(circle, var(--pink-soft) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+    }
+    body::after {
+      content: '';
+      position: fixed;
+      bottom: -80px; left: -80px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, var(--peach-soft) 0%, transparent 65%);
+      pointer-events: none; z-index: 0;
     }
 
-    /* ================= SIDEBAR ================= */
-    .sidebar{
-      width:285px;
-      background:rgba(255,255,255,0.05);
-      backdrop-filter:blur(22px);
-      border-right:1px solid rgba(255,255,255,0.08);
-      padding:25px;
-      overflow-y:auto;
-      position:sticky;
-      top:0;
-      height:100vh;
+    /* floating petal SVG elements */
+    .petal-deco {
+      position: fixed;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.5;
+      font-size: 28px;
+      animation: floatPetal 8s ease-in-out infinite;
+    }
+    .petal-deco:nth-child(1) { top: 12%; right: 8%;  animation-delay: 0s; }
+    .petal-deco:nth-child(2) { top: 40%; right: 3%;  animation-delay: 2s; font-size: 18px; }
+    .petal-deco:nth-child(3) { top: 70%; right: 12%; animation-delay: 4s; font-size: 22px; }
+    .petal-deco:nth-child(4) { top: 25%; left: 5%;   animation-delay: 1s; font-size: 16px; }
+    .petal-deco:nth-child(5) { top: 60%; left: 2%;   animation-delay: 3s; }
+
+    @keyframes floatPetal {
+      0%,100% { transform: translateY(0) rotate(0deg); }
+      50%      { transform: translateY(-18px) rotate(12deg); }
     }
 
-    .sidebar h1{
-      font-size:1.9rem;
-      font-weight:800;
-      color:#c084fc;
-      margin-bottom:30px;
-      text-shadow:0 0 20px rgba(192,132,252,0.35);
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: 260px;
+      background: linear-gradient(180deg, var(--white) 0%, var(--peach-soft) 100%);
+      border-right: 2px solid var(--border);
+      padding: 28px 20px;
+      overflow-y: auto;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      z-index: 10;
+      box-shadow: 3px 0 20px var(--shadow);
     }
 
-    .sidebar ul{
-      list-style:none;
+    .sidebar-logo {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .sidebar-logo h1 {
+      font-family: 'Pacifico', cursive;
+      font-size: 2rem;
+      color: var(--pink-deep);
+      letter-spacing: 1px;
+      text-shadow: 2px 2px 0 var(--pink-soft);
+    }
+    .sidebar-logo .tagline {
+      font-size: 0.72rem;
+      color: var(--text-light);
+      margin-top: 4px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
     }
 
-    .sidebar li{
-      padding:14px 16px;
-      margin-bottom:12px;
-      border-radius:16px;
-      cursor:pointer;
-      transition:all .3s ease;
-      font-weight:600;
-      color:#e5e7eb;
+    /* cute divider */
+    .sidebar-divider {
+      text-align: center;
+      font-size: 1rem;
+      margin: 8px 0 16px;
+      color: var(--peach-deep);
+      letter-spacing: 4px;
     }
 
-    .sidebar li:hover{
-      background:rgba(168,85,247,0.18);
-      transform:translateX(4px);
-      box-shadow:0 0 15px rgba(168,85,247,0.18);
+    .sidebar ul { list-style: none; }
+    .sidebar li {
+      padding: 12px 16px;
+      margin-bottom: 8px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--text-light);
+      transition: all .25s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 2px solid transparent;
+    }
+    .sidebar li:hover {
+      background: var(--pink-soft);
+      color: var(--pink-deep);
+      border-color: var(--pink);
+      transform: translateX(4px);
+    }
+    .sidebar li.active {
+      background: linear-gradient(135deg, var(--pink) 0%, var(--peach) 100%);
+      color: var(--white);
+      border-color: var(--pink-deep);
+      box-shadow: 0 4px 14px rgba(232,105,138,0.3);
+    }
+    .sidebar li .nav-icon { font-size: 1.1rem; }
+
+    /* ── MAIN ── */
+    .main {
+      flex: 1;
+      padding: 28px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      position: relative;
+      z-index: 1;
     }
 
-    .sidebar li.active{
-      background:linear-gradient(135deg,rgba(168,85,247,0.28),rgba(139,92,246,0.18));
-      box-shadow:0 0 20px rgba(168,85,247,0.28);
-      color:white;
+    /* ── HEADER ── */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 26px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .header h1 {
+      font-family: 'Pacifico', cursive;
+      font-size: 1.9rem;
+      color: var(--pink-deep);
+      text-shadow: 2px 2px 0 var(--blossom);
+    }
+    .header p { color: var(--text-light); margin-top: 5px; font-size: 0.88rem; font-weight: 600; }
+
+    .clock {
+      font-size: 1.2rem;
+      color: var(--white);
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--pink-deep), var(--peach-deep));
+      padding: 10px 20px;
+      border-radius: 50px;
+      box-shadow: 0 4px 14px rgba(232,105,138,0.3);
+      letter-spacing: 1px;
     }
 
-    /* ================= MAIN ================= */
-    .main{
-      flex:1;
-      padding:28px;
-      overflow-y:auto;
+    /* ── PAGE SWITCH ── */
+    .page { display: none; animation: fadeUp .3s ease; }
+    .page.active { display: block; }
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(10px); }
+      to   { opacity:1; transform:translateY(0); }
     }
 
-    .header{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-bottom:28px;
-      flex-wrap:wrap;
-      gap:20px;
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, var(--pink-soft), var(--peach-soft));
+      border: 2px solid var(--border);
+      border-radius: 24px;
+      padding: 22px 26px;
+      margin-bottom: 22px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::after {
+      content: '🌸';
+      position: absolute;
+      right: 24px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 3.5rem;
+      opacity: 0.35;
+    }
+    .hero h2 { font-size: 1.35rem; color: var(--pink-deep); margin-bottom: 8px; font-weight: 800; }
+    .hero p  { color: var(--text); line-height: 1.7; font-size: 0.9rem; max-width: 80%; }
+
+    /* ── GRID ── */
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--white);
+      border: 2px solid var(--border);
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: 0 6px 24px var(--shadow);
+      transition: all .25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: -2px; left: -2px; right: -2px;
+      height: 5px;
+      background: linear-gradient(90deg, var(--pink), var(--peach), var(--pink));
+      border-radius: 24px 24px 0 0;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(240,140,140,0.22);
+    }
+    .card h2 {
+      color: var(--pink-deep);
+      margin-bottom: 14px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .header h1{
-      font-size:2.2rem;
-      font-weight:800;
-      background:linear-gradient(90deg,#ffffff,#d8b4fe);
-      -webkit-background-clip:text;
-      -webkit-text-fill-color:transparent;
+    /* ── INPUTS ── */
+    input, select {
+      width: 100%;
+      padding: 10px 14px;
+      margin: 6px 0;
+      border: 2px solid var(--border);
+      outline: none;
+      border-radius: 50px;
+      background: var(--cream);
+      color: var(--text);
+      font-size: 0.88rem;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 600;
+      transition: border-color .2s;
+    }
+    input:focus, select:focus { border-color: var(--pink-deep); background: var(--white); }
+    input::placeholder { color: var(--text-light); }
+
+    /* ── BUTTONS ── */
+    button {
+      padding: 9px 18px;
+      border: none;
+      border-radius: 50px;
+      background: linear-gradient(135deg, var(--pink-deep), var(--peach-deep));
+      color: var(--white);
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 0.83rem;
+      font-family: 'Nunito', sans-serif;
+      transition: all .22s ease;
+      margin: 3px;
+      box-shadow: 0 3px 10px rgba(232,105,138,0.28);
+    }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(232,105,138,0.38);
+    }
+    button:active { transform: scale(0.97); }
+
+    /* ── TASK LIST ── */
+    ul { list-style: none; }
+    li.task, li.expense {
+      background: var(--cream2);
+      border: 1.5px solid var(--border);
+      margin: 8px 0;
+      padding: 10px 14px;
+      border-radius: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+    .task-text { flex:1; cursor:pointer; line-height:1.5; font-size: 0.88rem; font-weight: 600; }
+    .done { text-decoration: line-through; opacity: 0.45; }
+
+    /* ── HEATMAP ── */
+    .heatmap { overflow-x: auto; padding: 4px 0; }
+
+    /* ── QUOTE ── */
+    .quote {
+      font-style: italic;
+      color: var(--text);
+      line-height: 1.8;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding-left: 16px;
+      border-left: 4px solid var(--pink);
     }
 
-    .header p{
-      color:#cbd5e1;
-      margin-top:6px;
+    .level {
+      margin-top: 12px;
+      font-size: 0.9rem;
+      color: var(--pink-deep);
+      font-weight: 800;
+      text-align: center;
     }
 
-    .clock{
-      font-size:1.4rem;
-      color:#d8b4fe;
-      font-weight:700;
-      background:rgba(255,255,255,0.05);
-      padding:12px 18px;
-      border-radius:16px;
-      backdrop-filter:blur(10px);
+    /* ── SOLO PAGE ── */
+    .solo-page { max-width: 1300px; margin: auto; }
+
+    iframe {
+      width: 100%;
+      min-height: 680px;
+      border: 2px solid var(--border);
+      border-radius: 20px;
+      margin-top: 12px;
+      background: white;
+      overscroll-behavior: contain;
     }
 
-    /* ================= PAGE ================= */
-    .page{
-      display:none;
-      animation:fadeIn .35s ease;
+    .finance-total {
+      font-size: 1.25rem;
+      color: var(--pink-deep);
+      margin: 14px 0;
+      font-weight: 900;
+      text-align: center;
     }
 
-    .page.active{
-      display:block;
+    /* ── CUTE BADGE ── */
+    .badge {
+      display: inline-block;
+      background: var(--pink-soft);
+      color: var(--pink-deep);
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 50px;
+      margin-left: 6px;
+      border: 1.5px solid var(--pink);
     }
 
-    @keyframes fadeIn{
-      from{
-        opacity:0;
-        transform:translateY(8px);
-      }
-      to{
-        opacity:1;
-        transform:translateY(0);
-      }
-    }
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: var(--cream); }
+    ::-webkit-scrollbar-thumb { background: var(--pink); border-radius: 50px; }
 
-    /* ================= DASHBOARD HERO ================= */
-    .hero{
-      background:linear-gradient(135deg,rgba(168,85,247,0.16),rgba(59,130,246,0.08));
-      border:1px solid rgba(255,255,255,0.08);
-      border-radius:28px;
-      padding:24px;
-      margin-bottom:24px;
-      box-shadow:0 12px 30px rgba(0,0,0,0.25);
-    }
-
-    .hero h2{
-      font-size:1.6rem;
-      margin-bottom:10px;
-      color:#f5d0fe;
-    }
-
-    .hero p{
-      color:#d1d5db;
-      line-height:1.7;
-    }
-
-    /* ================= GRID ================= */
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
-      gap:22px;
-    }
-
-    /* ================= CARD ================= */
-    .card{
-      background:rgba(255,255,255,0.06);
-      border:1px solid rgba(255,255,255,0.06);
-      border-radius:28px;
-      padding:22px;
-      backdrop-filter:blur(18px);
-      box-shadow:
-        0 10px 30px rgba(0,0,0,0.35),
-        inset 0 0 1px rgba(255,255,255,0.12);
-      transition:all .3s ease;
-    }
-
-    .card:hover{
-      transform:translateY(-5px);
-      box-shadow:
-        0 15px 35px rgba(0,0,0,0.4),
-        0 0 25px rgba(168,85,247,0.16);
-    }
-
-    .card h2{
-      color:#e9d5ff;
-      margin-bottom:16px;
-      font-size:1.25rem;
-      font-weight:700;
-    }
-
-    input,select{
-      width:100%;
-      padding:12px 14px;
-      margin:8px 0;
-      border:none;
-      outline:none;
-      border-radius:14px;
-      background:#111827;
-      color:white;
-      font-size:0.95rem;
-    }
-
-    button{
-      padding:10px 16px;
-      border:none;
-      border-radius:14px;
-      background:linear-gradient(135deg,#7c3aed,#9333ea);
-      color:white;
-      cursor:pointer;
-      font-weight:600;
-      transition:.25s;
-      margin:4px;
-    }
-
-    button:hover{
-      transform:translateY(-2px);
-      box-shadow:0 8px 18px rgba(124,58,237,0.35);
-    }
-
-    ul{
-      list-style:none;
-    }
-
-    li.task,
-    li.expense{
-      background:#0f172a;
-      margin:10px 0;
-      padding:12px;
-      border-radius:14px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-    }
-
-    .task-text{
-      flex:1;
-      cursor:pointer;
-      line-height:1.5;
-    }
-
-    .done{
-      text-decoration:line-through;
-      opacity:0.5;
-    }
-
-    /* ================= HEATMAP FIXED ================= */
-    .heatmap{
-      display:grid;
-      grid-template-columns:repeat(7,1fr);
-      gap:7px;
-      margin-top:12px;
-    }
-
-    .heat{
-      height:28px;
-      border-radius:7px;
-      background:#1f2937;
-      transition:.2s;
-    }
-
-    .heat:hover{
-      transform:scale(1.08);
-    }
-
-    .quote{
-      font-style:italic;
-      color:#ddd6fe;
-      line-height:1.8;
-    }
-
-    .level{
-      margin-top:14px;
-      font-size:1rem;
-      color:#c084fc;
-      font-weight:700;
-    }
-
-    .solo-page{
-      max-width:1300px;
-      margin:auto;
-    }
-
-    iframe{
-      width:100%;
-      min-height:720px;
-      border:none;
-      border-radius:18px;
-      margin-top:14px;
-      background:white;
-    }
-
-    .finance-total{
-      font-size:1.35rem;
-      color:#c084fc;
-      margin:16px 0;
-      font-weight:800;
-    }
-
-    @media(max-width:1000px){
-      body{
-        flex-direction:column;
-      }
-
-      .sidebar{
-        width:100%;
-        height:auto;
-        position:relative;
-      }
-
-      .main{
-        padding:18px;
-      }
+    @media(max-width:900px){
+      body { flex-direction: column; }
+      .sidebar { width:100%; height:auto; position:relative; border-right:none; border-bottom: 2px solid var(--border); }
+      .main { padding: 16px; }
     }
   </style>
 </head>
 <body>
 
-<!-- ================= SIDEBAR ================= -->
-<div class="sidebar">
-  <h1>⚡ V7 GOD MODE</h1>
+<!-- Floating petals -->
+<div class="petal-deco">🌸</div>
+<div class="petal-deco">🌺</div>
+<div class="petal-deco">✿</div>
+<div class="petal-deco">🌷</div>
+<div class="petal-deco">🍑</div>
 
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <h1>HTA07</h1>
+    <div class="tagline">✦ your study sanctuary ✦</div>
+  </div>
+  <div class="sidebar-divider">✿ ♡ ✿</div>
   <ul>
-    <li class="active" onclick="showPage('dashboardPage', this)">🏠 Dashboard</li>
-    <li onclick="showPage('musicPage', this)">🎵 Music</li>
-    <li onclick="showPage('schedulePage', this)">📚 Thời Khoá Biểu</li>
-    <li onclick="showPage('studyPage', this)">📘 Tài Liệu Học</li>
-    <li onclick="showPage('documentPage', this)">🗂 Tài Liệu</li>
-    <li onclick="showPage('examPage', this)">📝 Lịch Thi</li>
-    <li onclick="showPage('financePage', this)">💸 Finance</li>
+    <li class="active" onclick="showPage('dashboardPage',this)"><span class="nav-icon">🏠</span> Dashboard</li>
+    <li onclick="showPage('musicPage',this)"><span class="nav-icon">🎵</span> Music</li>
+    <li onclick="showPage('schedulePage',this)"><span class="nav-icon">📚</span> Thời Khoá Biểu</li>
+    <li onclick="showPage('studyPage',this)"><span class="nav-icon">📘</span> Tài Liệu Học</li>
+    <li onclick="showPage('documentPage',this)"><span class="nav-icon">🗂</span> Tiếng Anh</li>
+    <li onclick="showPage('examPage',this)"><span class="nav-icon">📝</span> Lịch Thi</li>
+    <li onclick="showPage('financePage',this)"><span class="nav-icon">💸</span> Finance</li>
   </ul>
 </div>
 
@@ -344,10 +404,9 @@
   <!-- HEADER -->
   <div class="header">
     <div>
-      <h1 id="greeting">Welcome</h1>
-      <p>Deep Focus Productivity + Study + Finance OS</p>
+      <h1 id="greeting">Welcome ✨</h1>
+      <p>🌸 Deep Focus · Study · Finance · Productivity</p>
     </div>
-
     <div class="clock" id="clock"></div>
   </div>
 
@@ -355,62 +414,48 @@
   <div id="dashboardPage" class="page active">
 
     <div class="hero">
-      <h2>🚀 Command Center</h2>
-      <p>
-        Track nhiệm vụ, Pomodoro, Heatmap, tiến độ học tập và discipline mỗi ngày —
-        tất cả trong một hệ thống tối ưu cho deep work.
-      </p>
+      <h2>🌸 Command Center</h2>
+      <p>Track nhiệm vụ, Pomodoro, Heatmap, tiến độ học tập và discipline mỗi ngày — tất cả trong một hệ thống tối ưu cho deep work.</p>
     </div>
 
-    <div class="grid">
-            <!-- POMODORO -->
+    <div class="grid" style="grid-template-columns: repeat(3, 1fr);">
       <div class="card" id="pomodoroCard"></div>
-
-      <!-- TASK -->
       <div class="card">
         <h2>✅ Task Manager</h2>
-
-        <input
-          type="text"
-          id="taskInput"
-          placeholder="Nhập task hôm nay..."
-        />
-
+        <input type="text" id="taskInput" placeholder="Nhập task hôm nay... 🌷"/>
         <select id="priority">
           <option>High</option>
           <option>Medium</option>
           <option>Low</option>
         </select>
-
-        <button onclick="addTask()">Add Task</button>
-
+        <button onclick="addTask()">+ Add Task</button>
         <ul id="taskList"></ul>
       </div>
-
-      <!-- PRODUCTIVITY -->
       <div class="card">
         <h2>📊 Productivity Stats</h2>
-
         <canvas id="chart"></canvas>
-
-        <div class="level" id="level">
-          Level: Beginner | XP: 0
-        </div>
+        <div class="level" id="level">Level: Beginner ⭐ XP: 0</div>
       </div>
+    </div>
 
-      <!-- HEATMAP -->
-      <div class="card">
+    <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:18px;margin-top:18px;">
+      <div class="card" style="overflow:hidden;">
         <h2>📅 Productivity Heatmap</h2>
         <div class="heatmap" id="heatmap"></div>
       </div>
-
-      <!-- QUOTE -->
       <div class="card">
-        <h2>💭 Daily Quote</h2>
-        <p class="quote" id="dailyQuote"></p>
+        <h2>📈 Weekly Trend</h2>
+        <div style="position:relative;height:240px;">
+          <canvas id="weeklyChart"></canvas>
+        </div>
       </div>
-
     </div>
+
+    <div class="card" style="margin-top:18px;">
+      <h2>💭 Daily Quote</h2>
+      <p class="quote" id="dailyQuote"></p>
+    </div>
+
   </div>
 
   <!-- MUSIC PAGE -->
@@ -418,22 +463,14 @@
     <div class="solo-page">
       <div class="card">
         <h2>🎵 SoundCloud Focus Zone</h2>
-
-        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:15px;">
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;">
           <button onclick="openSoundCloudHome()">🌍 Home</button>
           <button onclick="openSoundCloudSearch()">🔎 Search</button>
           <button onclick="openSoundCloudLiked()">❤️ Likes</button>
         </div>
-
-        <input
-          type="text"
-          id="soundcloudLink"
-          placeholder="Dán link playlist / track SoundCloud"
-        />
-
-        <button onclick="saveSoundCloud()">Lưu Playlist</button>
-        <button onclick="removeSoundCloud()">Xoá</button>
-
+        <input type="text" id="soundcloudLink" placeholder="Dán link playlist / track SoundCloud 🎶"/>
+        <button onclick="saveSoundCloud()">💾 Lưu Playlist</button>
+        <button onclick="removeSoundCloud()">🗑 Xoá</button>
         <div id="soundcloudContainer"></div>
       </div>
     </div>
@@ -444,16 +481,9 @@
     <div class="solo-page">
       <div class="card">
         <h2>📚 Thời Khoá Biểu</h2>
-
-        <input
-          type="text"
-          id="scheduleLink"
-          placeholder="Dán link Google Sheet thời khoá biểu"
-        />
-
-        <button onclick="saveSheet('scheduleLink','scheduleContainer')">Lưu</button>
-        <button onclick="removeSheet('scheduleLink','scheduleContainer')">Xoá</button>
-
+        <input type="text" id="scheduleLink" placeholder="Dán link Google Sheet thời khoá biểu 🗓"/>
+        <button onclick="saveSheet('scheduleLink','scheduleContainer')">💾 Lưu</button>
+        <button onclick="removeSheet('scheduleLink','scheduleContainer')">🗑 Xoá</button>
         <div id="scheduleContainer"></div>
       </div>
     </div>
@@ -464,36 +494,22 @@
     <div class="solo-page">
       <div class="card">
         <h2>📘 Tài Liệu Học</h2>
-
-        <input
-          type="text"
-          id="studyLink"
-          placeholder="Dán link Google Docs / Sheet tài liệu học"
-        />
-
-        <button onclick="saveSheet('studyLink','studyContainer')">Lưu</button>
-        <button onclick="removeSheet('studyLink','studyContainer')">Xoá</button>
-
+        <input type="text" id="studyLink" placeholder="Dán link Google Docs / Sheet tài liệu học 📖"/>
+        <button onclick="saveSheet('studyLink','studyContainer')">💾 Lưu</button>
+        <button onclick="removeSheet('studyLink','studyContainer')">🗑 Xoá</button>
         <div id="studyContainer"></div>
       </div>
     </div>
   </div>
 
-  <!-- DOCUMENT PAGE NEW -->
+  <!-- DOCUMENT -->
   <div id="documentPage" class="page">
     <div class="solo-page">
       <div class="card">
-        <h2>🗂 Tài Liệu (Google Drive)</h2>
-
-        <input
-          type="text"
-          id="documentLink"
-          placeholder="Dán link Google Drive / Folder tài liệu"
-        />
-
-        <button onclick="saveSheet('documentLink','documentContainer')">Lưu</button>
-        <button onclick="removeSheet('documentLink','documentContainer')">Xoá</button>
-
+        <h2>🗂 Tiếng Anh</h2>
+        <input type="text" id="documentLink" placeholder="Dán link Google Drive / Folder tài liệu 📂"/>
+        <button onclick="saveSheet('documentLink','documentContainer')">💾 Lưu</button>
+        <button onclick="removeSheet('documentLink','documentContainer')">🗑 Xoá</button>
         <div id="documentContainer"></div>
       </div>
     </div>
@@ -504,16 +520,9 @@
     <div class="solo-page">
       <div class="card">
         <h2>📝 Lịch Thi</h2>
-
-        <input
-          type="text"
-          id="examLink"
-          placeholder="Dán link Google Sheet lịch thi"
-        />
-
-        <button onclick="saveSheet('examLink','examContainer')">Lưu</button>
-        <button onclick="removeSheet('examLink','examContainer')">Xoá</button>
-
+        <input type="text" id="examLink" placeholder="Dán link Google Sheet lịch thi 📋"/>
+        <button onclick="saveSheet('examLink','examContainer')">💾 Lưu</button>
+        <button onclick="removeSheet('examLink','examContainer')">🗑 Xoá</button>
         <div id="examContainer"></div>
       </div>
     </div>
@@ -524,1051 +533,313 @@
     <div class="solo-page">
       <div class="card">
         <h2>💸 Annual Finance Tracker</h2>
-
-        <input type="date" id="expenseDate" />
-
-        <input
-          type="number"
-          id="expenseAmount"
-          placeholder="Nhập số tiền đã chi"
-        />
-
-        <input
-          type="text"
-          id="expenseNote"
-          placeholder="Ví dụ: Cafe / Sách / Ăn sáng..."
-        />
-
-        <button onclick="addExpense()">Add Expense</button>
-
-        <div class="finance-total" id="financeTotal">
-          Tổng năm: 0 VNĐ
-        </div>
-
+        <input type="date" id="expenseDate"/>
+        <input type="number" id="expenseAmount" placeholder="Nhập số tiền đã chi 💰"/>
+        <input type="text" id="expenseNote" placeholder="Ví dụ: Cafe / Sách / Ăn sáng 🍑"/>
+        <button onclick="addExpense()">+ Add Expense</button>
+        <div class="finance-total" id="financeTotal">🌸 Tổng năm: 0 VNĐ</div>
         <canvas id="financeChart"></canvas>
-
-        <h2 style="margin-top:25px;">📜 Lịch Sử Chi Tiêu</h2>
-
+        <h2 style="margin-top:22px;">📜 Lịch Sử Chi Tiêu</h2>
         <ul id="expenseList"></ul>
       </div>
     </div>
   </div>
 
-</div>
+</div><!-- end .main -->
 
 <script>
-  /* =========================================================
-DEFAULT LINKS — sửa ở đây khi muốn đổi link
-========================================================= */
 const DEFAULT_LINKS = {
-  scheduleLink:  "https://docs.google.com/spreadsheets/d/1G5d2LW-BJPkC6zu-TQ2qK2m3hrUI1dq38zMpxQpOyLk/preview?gid=0#gid=0",   // ← link Google Sheet thời khoá biểu
-  studyLink:     "https://docs.google.com/spreadsheets/d/1cqmjzTMCm6GS9xEUvjnioahHYoZm_Xta4lZd6feXABI/preview?gid=1933096348#gid=1933096348",   // ← link Google Docs tài liệu học
-  examLink:      "https://docs.google.com/spreadsheets/d/1zHBZ70asIh8GcMTGasL4Ay2wT5iNUeph/preview?gid=446335503#gid=446335503",   // ← link Google Sheet lịch thi
-  documentLink:  "https://docs.google.com/spreadsheets/d/1eGaFS2eB3jWP15lSLbpE-wpsnxZkHALkej8ZEyhRtYE/edit?hl=vi&gid=0#gid=0",   // ← link Google Drive folder
-  soundcloudLink:"https://soundcloud.com/ho-ng-tu-n-anh-615822302/sets/your-mix-2?si=2b5be9b2d9a14ba0aa775484dc7a0d28&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing"    // ← link SoundCloud playlist
+  scheduleLink:  "https://docs.google.com/spreadsheets/d/1G5d2LW-BJPkC6zu-TQ2qK2m3hrUI1dq38zMpxQpOyLk/preview?gid=0#gid=0",
+  studyLink:     "https://docs.google.com/spreadsheets/d/1cqmjzTMCm6GS9xEUvjnioahHYoZm_Xta4lZd6feXABI/preview?gid=1933096348#gid=1933096348",
+  examLink:      "https://docs.google.com/spreadsheets/d/1zHBZ70asIh8GcMTGasL4Ay2wT5iNUeph/preview?gid=446335503#gid=446335503",
+  documentLink:  "https://docs.google.com/spreadsheets/d/1-Ore4RB69-2pQtBYpoo823qxsOe7S55H38NOgkwrPKw/edit?gid=0#gid=0",
+  soundcloudLink:"https://soundcloud.com/ho-ng-tu-n-anh-615822302/sets/your-mix-2?si=2b5be9b2d9a14ba0aa775484dc7a0d28&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing"
 };
-/* =========================================================
-PAGE SWITCH
-========================================================= */
+
 function showPage(pageId, element){
-  document.querySelectorAll(".page").forEach(page=>{
-    page.classList.remove("active");
-  });
-
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
   document.getElementById(pageId).classList.add("active");
-
-  document.querySelectorAll(".sidebar li").forEach(item=>{
-    item.classList.remove("active");
-  });
-
+  document.querySelectorAll(".sidebar li").forEach(i => i.classList.remove("active"));
   element.classList.add("active");
 }
 
-/* =========================================================
-CLOCK + GREETING
-========================================================= */
 function updateClock(){
-  document.getElementById("clock").textContent =
-    new Date().toLocaleTimeString("vi-VN");
+  document.getElementById("clock").textContent = new Date().toLocaleTimeString("vi-VN");
 }
-
-setInterval(updateClock,1000);
-updateClock();
+setInterval(updateClock, 1000); updateClock();
 
 const hour = new Date().getHours();
-
 document.getElementById("greeting").textContent =
   hour < 12 ? "Good Morning ☀️" :
-  hour < 18 ? "Good Afternoon 🌤️" :
-  "Good Evening 🌙";
+  hour < 18 ? "Good Afternoon 🌤️" : "Good Evening 🌙";
 
-/* =========================================================
-DAILY QUOTES
-========================================================= */
 const quotes = [
-  "Success doesn’t come from motivation. It comes from discipline.",
-  "Discipline creates freedom.",
-  "Small progress is still progress.",
-  "You do not rise to the level of goals, you fall to the level of systems.",
-  "Focus on being productive, not busy.",
-  "Dreams demand consistency.",
-  "Hard days build strong minds.",
-  "Your future is created by what you do today.",
-  "Action beats overthinking.",
-  "Done is better than perfect.",
-  "One focused hour can change your life.",
+  "Sự khác biệt giữa người thành công và người thất bại là tư duy. Người thành công luôn nghĩ về những cơ hội.",
+  "Tư duy của bạn quyết định số phận của bạn.",
+  "Small progress is still progress. 🌸",
+  "Nếu bạn muốn thay đổi cuộc đời mình, hãy thay đổi cách bạn nghĩ.",
+  "Chỉ có một cách để thất bại: Đó là từ bỏ.",
+  "Nếu bạn đi qua địa ngục, hãy tiếp tục bước.",
+  "Thành công lớn nhất là không bao giờ từ bỏ – Steve Jobs",
+  "Vùng an toàn là nơi ước mơ chết đi.",
+  "Đừng đợi người khác tin vào bạn. Hãy là người đầu tiên làm điều đó.",
+  "Done is better than perfect. ✨",
+  "One focused hour can change your life. 🌷",
   "Motivation fades. Systems stay.",
   "The pain of discipline is lighter than regret.",
-  "Win the day, win the future.",
-  "Deep work builds rare value."
+  "Win the day, win the future. 🌸",
+  "Tôi bị mù nên mới từng yêu e =))))"
 ];
-
 function loadDailyQuote(){
   const today = new Date();
-
-  const seed =
-    today.getFullYear() +
-    today.getMonth() +
-    today.getDate();
-
-  const quoteIndex = seed % quotes.length;
-
-  document.getElementById("dailyQuote").textContent =
-    `“${quotes[quoteIndex]}”`;
+  const seed = today.getFullYear() + today.getMonth() + today.getDate();
+  document.getElementById("dailyQuote").textContent = `"${quotes[seed % quotes.length]}"`;
 }
-/* =========================================================
-TASK SYSTEM
-========================================================= */
-let tasks =
-  JSON.parse(localStorage.getItem("tasks")) || [];
 
-let xp =
-  parseInt(localStorage.getItem("xp")) || 0;
-
-function saveTasks(){
-  localStorage.setItem(
-    "tasks",
-    JSON.stringify(tasks)
-  );
-
-  localStorage.setItem(
-    "xp",
-    xp
-  );
-}
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+let xp = parseInt(localStorage.getItem("xp")) || 0;
+function saveTasks(){ localStorage.setItem("tasks", JSON.stringify(tasks)); localStorage.setItem("xp", xp); }
 
 function addTask(){
-  const input =
-    document.getElementById("taskInput");
-
-  const priority =
-    document.getElementById("priority").value;
-
+  const input = document.getElementById("taskInput");
+  const priority = document.getElementById("priority").value;
   if(!input.value.trim()) return;
-
-  tasks.push({
-    text:input.value,
-    done:false,
-    priority
-  });
-
+  tasks.push({ text: input.value, done: false, priority });
   input.value = "";
-
-  saveTasks();
-  renderTasks();
-  updateChart();
-  saveTodayProductivity();
+  saveTasks(); renderTasks(); updateChart(); saveTodayProductivity();
 }
-
 function renderTasks(){
-  const list =
-    document.getElementById("taskList");
-
+  const list = document.getElementById("taskList");
   list.innerHTML = "";
-
-  tasks.forEach((task,index)=>{
-
-    const li =
-      document.createElement("li");
-
+  tasks.forEach((task, index) => {
+    const li = document.createElement("li");
     li.className = "task";
-
-    li.innerHTML = `
-      <span
-        class="task-text ${task.done ? 'done' : ''}"
-        onclick="toggleTask(${index})"
-      >
-        [${task.priority}] ${task.text}
-      </span>
-
-      <button onclick="deleteTask(${index})">
-        X
-      </button>
-    `;
-
+    const priorityEmoji = task.priority === "High" ? "🔴" : task.priority === "Medium" ? "🟡" : "🟢";
+    li.innerHTML = `<span class="task-text ${task.done?'done':''}" onclick="toggleTask(${index})">${priorityEmoji} ${task.text}</span><button onclick="deleteTask(${index})">✕</button>`;
     list.appendChild(li);
   });
 }
-
 function toggleTask(index){
-  tasks[index].done =
-    !tasks[index].done;
-
-  if(tasks[index].done){
-    xp += 5;
-  }
-
-  saveTasks();
-  renderTasks();
-  updateChart();
-  updateLevel();
-  saveTodayProductivity();
+  tasks[index].done = !tasks[index].done;
+  if(tasks[index].done) xp += 5;
+  saveTasks(); renderTasks(); updateChart(); updateLevel(); saveTodayProductivity();
 }
-
-function deleteTask(index){
-  tasks.splice(index,1);
-
-  saveTasks();
-  renderTasks();
-  updateChart();
-  saveTodayProductivity();
-}
-
+function deleteTask(index){ tasks.splice(index,1); saveTasks(); renderTasks(); updateChart(); saveTodayProductivity(); }
 function updateLevel(){
-  let level =
-    xp < 50 ? "Beginner" :
-    xp < 150 ? "Focused" :
-    "Deep Work Master";
-
-  document.getElementById("level").textContent =
-    `Level: ${level} | XP: ${xp}`;
+  const level = xp < 50 ? "Beginner 🌱" : xp < 150 ? "Focused 🌸" : "Deep Work Master 🌺";
+  document.getElementById("level").textContent = `Level: ${level} | XP: ${xp}`;
 }
 
-/* =========================================================
-PRODUCTIVITY CHART
-========================================================= */
-let chart =
-  new Chart(
-    document.getElementById("chart"),
-    {
-      type:"doughnut",
-      data:{
-        labels:["Done","Pending"],
-        datasets:[{
-          data:[0,0],
-          backgroundColor:[
-            "#8b5cf6",
-            "#1f2937"
-          ]
-        }]
-      },
-      options:{
-        plugins:{
-          legend:{
-            labels:{
-              color:"white"
-            }
-          }
-        }
-      }
-    }
-  );
-
+let chart = new Chart(document.getElementById("chart"), {
+  type: "doughnut",
+  data: { labels: ["Done ✓", "Pending"], datasets: [{ data:[0,0], backgroundColor:["#E8698A","#FFE0E8"], borderWidth:0 }] },
+  options: { plugins: { legend: { labels: { color: "#6B3A50", font: { family:"Nunito", weight:"700" } } } } }
+});
 function updateChart(){
-  const done =
-    tasks.filter(t=>t.done).length;
-
-  const pending =
-    tasks.length - done;
-
-  chart.data.datasets[0].data =
-    [done,pending];
-
+  const done = tasks.filter(t=>t.done).length;
+  chart.data.datasets[0].data = [done, tasks.length - done];
   chart.update();
 }
 
-/* =========================================================
-POMODORO PRO
-========================================================= */
-let pomodoroMode = "focus";
-let focusTime = 25 * 60;
-let shortBreak = 5 * 60;
-let longBreak = 15 * 60;
+let weeklyChart = new Chart(document.getElementById("weeklyChart"), {
+  type: "bar",
+  data: {
+    labels: ["T2","T3","T4","T5","T6","T7","CN"],
+    datasets: [{ label: "Tasks hoàn thành", data:[0,0,0,0,0,0,0], backgroundColor:"rgba(232,105,138,0.65)", borderRadius:10, borderSkipped:false }]
+  },
+  options: {
+    responsive:true, maintainAspectRatio:false,
+    plugins: { legend: { labels: { color:"#6B3A50", font:{family:"Nunito",weight:"700"} } } },
+    scales: {
+      x: { ticks:{color:"#B07090"}, grid:{color:"rgba(255,180,180,0.15)"} },
+      y: { ticks:{color:"#B07090",stepSize:1}, grid:{color:"rgba(255,180,180,0.15)"}, beginAtZero:true }
+    }
+  }
+});
+function updateWeeklyChart(){
+  const productivityData = JSON.parse(localStorage.getItem("productivityData")) || {};
+  const data = [];
+  for(let i=6;i>=0;i--){ const date=new Date(); date.setDate(date.getDate()-i); data.push(productivityData[date.toISOString().split("T")[0]]||0); }
+  const today = new Date().getDay(); const shift = today===0?6:today-1;
+  weeklyChart.data.datasets[0].data = [...data.slice(shift),...data.slice(0,shift)];
+  weeklyChart.update();
+}
 
-let sessions =
-  parseInt(
-    localStorage.getItem("pomodoroSessions")
-  ) || 0;
-
-let timerInterval = null;
-let timeLeft = focusTime;
-
-/* Custom alarm using YouTube audio source replaced by mp3 */
-const pomodoroAlarm = new Audio("alarm.mp3");
-pomodoroAlarm.volume = 1.0;
+/* POMODORO */
+let pomodoroMode="focus", focusTime=25*60, shortBreak=5*60, longBreak=15*60;
+let sessions = parseInt(localStorage.getItem("pomodoroSessions"))||0;
+let timerInterval=null, timeLeft=focusTime;
+const pomodoroAlarm = new Audio("alarm.mp3"); pomodoroAlarm.volume=1.0;
 
 function createPomodoroControls(){
-  document.getElementById(
-    "pomodoroCard"
-  ).innerHTML = `
+  document.getElementById("pomodoroCard").innerHTML = `
     <h2>🍅 Pomodoro PRO</h2>
-
-    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:15px;">
+    <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-bottom:12px;">
       <button onclick="setPomodoroMode('focus')">Focus 25</button>
       <button onclick="setPomodoroMode('short')">Short 5</button>
       <button onclick="setPomodoroMode('long')">Long 15</button>
     </div>
-
-    <div>
-      <label>Custom Focus (phút)</label>
-      <input
-        type="number"
-        id="customFocus"
-        value="25"
-      >
-      <button onclick="applyCustomPomodoro()">
-        Apply
-      </button>
+    <div><label style="font-size:.82rem;color:var(--text-light);font-weight:700;">Custom Focus (phút)</label>
+      <input type="number" id="customFocus" value="25">
+      <button onclick="applyCustomPomodoro()">Apply ✓</button>
     </div>
-
-    <div style="position:relative;width:220px;height:220px;margin:auto;">
-      <svg width="220" height="220">
-
-        <circle
-          cx="110"
-          cy="110"
-          r="90"
-          stroke="#1f2937"
-          stroke-width="12"
-          fill="none"
-        />
-
-        <circle
-          id="progressRing"
-          cx="110"
-          cy="110"
-          r="90"
-          stroke="#a855f7"
-          stroke-width="12"
-          fill="none"
-          stroke-linecap="round"
-          stroke-dasharray="565"
-          stroke-dashoffset="0"
-          transform="rotate(-90 110 110)"
-        />
-
+    <div style="position:relative;width:200px;height:200px;margin:auto;">
+      <svg width="200" height="200">
+        <circle cx="100" cy="100" r="82" stroke="#FFE0E8" stroke-width="10" fill="none"/>
+        <circle id="progressRing" cx="100" cy="100" r="82" stroke="#E8698A" stroke-width="10" fill="none"
+          stroke-linecap="round" stroke-dasharray="515" stroke-dashoffset="0" transform="rotate(-90 100 100)"/>
       </svg>
-
-      <div
-        id="timer"
-        style="
-          position:absolute;
-          top:50%;
-          left:50%;
-          transform:translate(-50%,-50%);
-          font-size:2.5rem;
-          font-weight:800;
-          color:#c084fc;
-        "
-      >
-        25:00
-      </div>
+      <div id="timer" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:2.2rem;font-weight:900;color:var(--pink-deep);">25:00</div>
     </div>
-
-    <div style="text-align:center;margin-top:15px;">
-      <button onclick="startTimer()">Start</button>
-      <button onclick="pauseTimer()">Pause</button>
-      <button onclick="resetTimer()">Reset</button>
+    <div style="text-align:center;margin-top:12px;">
+      <button onclick="startTimer()">▶ Start</button>
+      <button onclick="pauseTimer()">⏸ Pause</button>
+      <button onclick="resetTimer()">↺ Reset</button>
     </div>
-
-    <p style="text-align:center;margin-top:10px;color:#c084fc;">
-      Sessions:
-      <span id="sessionCount">${sessions}</span>
-    </p>
-  `;
+    <p style="text-align:center;margin-top:8px;color:var(--pink-deep);font-weight:800;font-size:.88rem;">🌸 Sessions: <span id="sessionCount">${sessions}</span></p>`;
 }
-
 function setPomodoroMode(mode){
-  pomodoroMode = mode;
-
-  pauseTimer();
-
-  if(mode==="focus") timeLeft = focusTime;
-  if(mode==="short") timeLeft = shortBreak;
-  if(mode==="long") timeLeft = longBreak;
-
+  pomodoroMode=mode; pauseTimer();
+  if(mode==="focus") timeLeft=focusTime;
+  if(mode==="short") timeLeft=shortBreak;
+  if(mode==="long")  timeLeft=longBreak;
   updateTimer();
 }
-
-function applyCustomPomodoro(){
-  const custom =
-    parseInt(
-      document.getElementById("customFocus").value
-    );
-
-  if(custom > 0){
-    focusTime = custom * 60;
-    setPomodoroMode("focus");
-  }
-}
+function applyCustomPomodoro(){ const c=parseInt(document.getElementById("customFocus").value); if(c>0){focusTime=c*60;setPomodoroMode("focus");} }
 function updateProgressRing(){
-  let total =
-    pomodoroMode==="focus" ? focusTime :
-    pomodoroMode==="short" ? shortBreak :
-    longBreak;
-
-  const progress =
-    timeLeft / total;
-
-  const circumference = 565;
-
-  const ring =
-    document.getElementById("progressRing");
-
-  if(ring){
-    ring.style.strokeDashoffset =
-      circumference - (progress * circumference);
-  }
+  const total = pomodoroMode==="focus"?focusTime:pomodoroMode==="short"?shortBreak:longBreak;
+  const ring = document.getElementById("progressRing");
+  if(ring) ring.style.strokeDashoffset = 515 - (timeLeft/total)*515;
 }
-
 function updateTimer(){
-  const min =
-    String(
-      Math.floor(timeLeft / 60)
-    ).padStart(2,"0");
-
-  const sec =
-    String(
-      timeLeft % 60
-    ).padStart(2,"0");
-
-  const timer =
-    document.getElementById("timer");
-
-  if(timer){
-    timer.textContent =
-      `${min}:${sec}`;
-  }
-
-  updateProgressRing();
+  const min=String(Math.floor(timeLeft/60)).padStart(2,"0"), sec=String(timeLeft%60).padStart(2,"0");
+  const t=document.getElementById("timer"); if(t) t.textContent=`${min}:${sec}`; updateProgressRing();
 }
-
 function startTimer(){
   if(timerInterval) return;
-
-  timerInterval = setInterval(()=>{
-
-    if(timeLeft > 0){
-
-      timeLeft--;
-      updateTimer();
-
-    }else{
-
-      clearInterval(timerInterval);
-      timerInterval = null;
-
-      pomodoroAlarm.currentTime = 0;
-      pomodoroAlarm.play();
-
-      if(pomodoroMode==="focus"){
-
-        sessions++;
-        xp += 15;
-
-        localStorage.setItem(
-          "pomodoroSessions",
-          sessions
-        );
-
-        saveTasks();
-
-        document.getElementById(
-          "sessionCount"
-        ).textContent = sessions;
-
-        updateLevel();
-
-        if(sessions % 4 === 0){
-          setPomodoroMode("long");
-        }else{
-          setPomodoroMode("short");
-        }
-
-      }else{
-        setPomodoroMode("focus");
-      }
+  timerInterval=setInterval(()=>{
+    if(timeLeft>0){ timeLeft--; updateTimer(); }
+    else{
+      clearInterval(timerInterval); timerInterval=null;
+      pomodoroAlarm.currentTime=0; pomodoroAlarm.play();
+      if(pomodoroMode==="focus"){ sessions++; xp+=15; localStorage.setItem("pomodoroSessions",sessions); saveTasks(); document.getElementById("sessionCount").textContent=sessions; updateLevel(); setPomodoroMode(sessions%4===0?"long":"short"); }
+      else setPomodoroMode("focus");
     }
-
   },1000);
 }
+function pauseTimer(){ clearInterval(timerInterval); timerInterval=null; }
+function resetTimer(){ pauseTimer(); setPomodoroMode(pomodoroMode); }
 
-function pauseTimer(){
-  clearInterval(timerInterval);
-  timerInterval = null;
-}
-
-function resetTimer(){
-  pauseTimer();
-  setPomodoroMode(pomodoroMode);
-}
-
-/* =========================================================
-HEATMAP
-FIX:
-- Left → Right
-- Top → Bottom
-- Oldest → Newest
-========================================================= */
+/* HEATMAP */
 function generateHeatmap(){
-  const heatmap =
-    document.getElementById("heatmap");
-
-  if(!heatmap) return;
-
-  heatmap.innerHTML = "";
-
-  let productivityData =
-    JSON.parse(
-      localStorage.getItem("productivityData")
-    ) || {};
-
-  let boxes = [];
-
-  for(let i=34;i>=0;i--){
-
-    const date = new Date();
-
-    date.setDate(
-      date.getDate() - i
-    );
-
-    const key =
-      date.toISOString().split("T")[0];
-
-    const score =
-      productivityData[key] || 0;
-
-    boxes.push({
-      key,
-      score
-    });
-  }
-
-  boxes.forEach(day=>{
-
-    const div =
-      document.createElement("div");
-
-    div.className = "heat";
-
-    if(day.score===0){
-      div.style.background="#1f2937";
-    }
-    else if(day.score<3){
-      div.style.background="#4c1d95";
-    }
-    else if(day.score<6){
-      div.style.background="#7c3aed";
-    }
-    else{
-      div.style.background="#c084fc";
-    }
-
-    div.title =
-      `${day.key}: ${day.score} tasks`;
-
-    heatmap.appendChild(div);
-
+  const heatmap=document.getElementById("heatmap"); if(!heatmap) return;
+  const productivityData=JSON.parse(localStorage.getItem("productivityData"))||{};
+  const days=[];
+  for(let i=363;i>=0;i--){ const date=new Date(); date.setDate(date.getDate()-i); const key=date.toISOString().split("T")[0]; days.push({key,score:productivityData[key]||0,date}); }
+  const firstDay=days[0].date.getDay();
+  const months=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  let monthLabels='<div style="display:grid;grid-template-columns:repeat(53,12px);gap:2px;margin-bottom:4px;padding-left:18px;">';
+  let lastMonth=-1;
+  for(let w=0;w<53;w++){ const di=w*7-firstDay; if(di>=0&&di<days.length){ const m=days[di].date.getMonth(); if(m!==lastMonth){ monthLabels+=`<div style="grid-column:${w+1};font-size:10px;color:var(--text-light);">${months[m]}</div>`; lastMonth=m; } } }
+  monthLabels+='</div>';
+  let grid='<div style="display:flex;gap:6px;">';
+  grid+=`<div style="display:grid;grid-template-rows:repeat(7,14px);gap:3px;">
+    <div style="font-size:10px;color:var(--text-light);height:14px;line-height:14px;"></div>
+    <div style="font-size:10px;color:var(--text-light);height:14px;line-height:14px;">Mon</div>
+    <div style="font-size:10px;color:var(--text-light);height:14px;line-height:14px;"></div>
+    <div style="font-size:10px;color:var(--text-light);height:14px;line-height:14px;">Wed</div>
+    <div style="font-size:10px;color:var(--text-light);height:14px;line-height:14px;"></div>
+    <div style="font-size:10px;color:var(--text-light);height:14px;line-height:14px;">Fri</div>
+    <div style="font-size:10px;color:var(--text-light);height:14px;line-height:14px;"></div>
+  </div>`;
+  grid+='<div style="display:grid;grid-template-rows:repeat(7,12px);grid-auto-flow:column;grid-auto-columns:12px;gap:2px;">';
+  for(let i=0;i<firstDay;i++) grid+=`<div style="width:12px;height:12px;border-radius:3px;"></div>`;
+  days.forEach(day=>{
+    const bg = day.score===0?"#FFE4D0":day.score<3?"#FFB7C5":day.score<6?"#F4956A":"#E8698A";
+    grid+=`<div title="${day.key}: ${day.score} tasks" style="width:12px;height:12px;border-radius:3px;background:${bg};cursor:pointer;transition:.15s;" onmouseover="this.style.opacity='.7'" onmouseout="this.style.opacity='1'"></div>`;
   });
+  grid+='</div></div>';
+  const legend=`<div style="display:flex;align-items:center;gap:6px;margin-top:10px;font-size:11px;color:var(--text-light);font-weight:700;">
+    <span>Less</span>
+    <div style="width:12px;height:12px;border-radius:3px;background:#FFE4D0;border:1px solid #FFB7C5;"></div>
+    <div style="width:12px;height:12px;border-radius:3px;background:#FFB7C5;"></div>
+    <div style="width:12px;height:12px;border-radius:3px;background:#F4956A;"></div>
+    <div style="width:12px;height:12px;border-radius:3px;background:#E8698A;"></div>
+    <span>More</span>
+  </div>`;
+  heatmap.innerHTML = monthLabels+grid+legend;
 }
-
 function saveTodayProductivity(){
-  const key =
-    new Date()
-      .toISOString()
-      .split("T")[0];
-
-  let productivityData =
-    JSON.parse(
-      localStorage.getItem("productivityData")
-    ) || {};
-
-  productivityData[key] =
-    tasks.filter(
-      t=>t.done
-    ).length;
-
-  localStorage.setItem(
-    "productivityData",
-    JSON.stringify(productivityData)
-  );
-
-  generateHeatmap();
+  const key=new Date().toISOString().split("T")[0];
+  const productivityData=JSON.parse(localStorage.getItem("productivityData"))||{};
+  productivityData[key]=tasks.filter(t=>t.done).length;
+  localStorage.setItem("productivityData",JSON.stringify(productivityData));
+  generateHeatmap(); updateWeeklyChart();
 }
 
-/* =========================================================
-GOOGLE SHEET / DRIVE
-NEW:
-- Schedule
-- Study
-- Exam
-- Tai Lieu (Google Drive)
-========================================================= */
-/* =========================================================
-GOOGLE SHEET / DRIVE FIX
-FIX 403 GOOGLE DRIVE:
-- file/d/.../view  -> preview
-- open?id=... -> uc?export=download&id=...
-- folders -> dùng link thường (mở tab mới tốt hơn)
-========================================================= */
+/* GOOGLE SHEET */
 function convertGoogleLink(url){
-
-  /* Google Docs / Sheets */
-  if(
-    url.includes("docs.google.com") &&
-    url.includes("/edit")
-  ){
-    return url.replace(
-      "/edit",
-      "/preview"
-    );
-  }
-
-  /* Google Drive file */
-  if(
-    url.includes("drive.google.com/file/d/")
-  ){
-    const fileId =
-      url.split("/file/d/")[1]
-         .split("/")[0];
-
-    return `https://drive.google.com/file/d/${fileId}/preview`;
-  }
-
-  /* Google Drive open?id= */
-  if(
-    url.includes("drive.google.com/open?id=")
-  ){
-    const fileId =
-      url.split("id=")[1];
-
-    return `https://drive.google.com/file/d/${fileId}/preview`;
-  }
-
-  /* Folder often blocks iframe */
-  if(
-    url.includes("drive.google.com/drive/folders/")
-  ){
-    return url;
-  }
-
+  if(url.includes("docs.google.com")&&url.includes("/edit")) return url.replace("/edit","/preview");
+  if(url.includes("drive.google.com/file/d/")){ const id=url.split("/file/d/")[1].split("/")[0]; return `https://drive.google.com/file/d/${id}/preview`; }
+  if(url.includes("drive.google.com/open?id=")){ const id=url.split("id=")[1]; return `https://drive.google.com/file/d/${id}/preview`; }
   return url;
 }
-
-function saveSheet(inputId, containerId){
-  const input =
-    document.getElementById(inputId);
-
-  let link =
-    input.value.trim();
-
-  if(!link) return;
-
-  link =
-    convertGoogleLink(link);
-
-  localStorage.setItem(
-    inputId,
-    link
-  );
-
-  loadSheet(inputId, containerId);
+function saveSheet(inputId,containerId){ const input=document.getElementById(inputId); let link=input.value.trim(); if(!link) return; link=convertGoogleLink(link); localStorage.setItem(inputId,link); loadSheet(inputId,containerId); }
+function loadSheet(inputId,containerId,savedLink){
+  if(!savedLink) savedLink=localStorage.getItem(inputId);
+  const container=document.getElementById(containerId); if(!savedLink) return;
+  if(savedLink.includes("drive.google.com/drive/folders/")){ container.innerHTML=`<div style="padding:20px;text-align:center;"><p style="margin-bottom:12px;color:var(--text-light);">Folder Google Drive thường chặn iframe.</p><button onclick="window.open('${savedLink}','_blank')">📂 Mở Google Drive Folder</button></div>`; }
+  else { container.innerHTML=`<iframe src="${savedLink}" allow="autoplay"></iframe>`; }
+  document.getElementById(inputId).value=savedLink;
 }
-
-function loadSheet(inputId, containerId, savedLink) {
-  if (!savedLink) savedLink = localStorage.getItem(inputId);
-  const container = document.getElementById(containerId);
-  if (!savedLink) return;
-
-  if (savedLink.includes("drive.google.com/drive/folders/")) {
-    container.innerHTML = `
-      <div style="padding:20px;text-align:center;">
-        <p style="margin-bottom:12px;color:#ddd6fe;">Folder Google Drive thường chặn iframe.</p>
-        <button onclick="window.open('${savedLink}','_blank')">📂 Mở Google Drive Folder</button>
-      </div>`;
-  } else {
-    container.innerHTML = `<iframe src="${savedLink}" allow="autoplay"></iframe>`;
-  }
-  document.getElementById(inputId).value = savedLink;
-}
-
-
-function removeSheet(inputId, containerId){
-
-  localStorage.removeItem(
-    inputId
-  );
-
-  document.getElementById(
-    inputId
-  ).value = "";
-
-  document.getElementById(
-    containerId
-  ).innerHTML = "";
-}
-/* =========================================================
-SOUNDCLOUD
-========================================================= */
-function openSoundCloudHome(){
-  window.open(
-    "https://soundcloud.com",
-    "_blank"
-  );
-}
-
-function openSoundCloudSearch(){
-  window.open(
-    "https://soundcloud.com/search",
-    "_blank"
-  );
-}
-
-function openSoundCloudLiked(){
-  window.open(
-    "https://soundcloud.com/you/likes",
-    "_blank"
-  );
-}
-
-function convertSoundCloudLink(url){
-  return `https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&color=%23a855f7&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&visual=true`;
-}
-
-function saveSoundCloud(){
-  const link =
-    document.getElementById(
-      "soundcloudLink"
-    ).value.trim();
-
-  if(!link) return;
-
-  localStorage.setItem(
-    "soundcloudLink",
-    link
-  );
-
-  loadSoundCloud();
-}
-
-function loadSoundCloud(savedLink) {
-  if (!savedLink) savedLink = localStorage.getItem("soundcloudLink");
-  const container = document.getElementById("soundcloudContainer");
-  if (!savedLink) return;
-  container.innerHTML = `
-    <iframe height="500" scrolling="no" frameborder="no" allow="autoplay"
-      src="${convertSoundCloudLink(savedLink)}"></iframe>`;
-  document.getElementById("soundcloudLink").value = savedLink;
-}
-
-function removeSoundCloud(){
-  localStorage.removeItem(
-    "soundcloudLink"
-  );
-
-  document.getElementById(
-    "soundcloudLink"
-  ).value = "";
-
-  document.getElementById(
-    "soundcloudContainer"
-  ).innerHTML = "";
-}
-
-/* =========================================================
-FINANCE SYSTEM
-========================================================= */
-let expenses =
-  JSON.parse(
-    localStorage.getItem("expenses")
-  ) || [];
-
-function saveExpenses(){
-  localStorage.setItem(
-    "expenses",
-    JSON.stringify(expenses)
-  );
-}
-
-function addExpense(){
-
-  const date =
-    document.getElementById(
-      "expenseDate"
-    ).value;
-
-  const amount =
-    parseFloat(
-      document.getElementById(
-        "expenseAmount"
-      ).value
-    );
-
-  const note =
-    document.getElementById(
-      "expenseNote"
-    ).value;
-
-  if(!date || !amount) return;
-
-  expenses.push({
-    date,
-    amount,
-    note
-  });
-
-  saveExpenses();
-  renderExpenses();
-}
-
-function deleteExpense(index){
-
-  expenses.splice(index,1);
-
-  saveExpenses();
-  renderExpenses();
-}
-
-let financeChart =
-  new Chart(
-    document.getElementById(
-      "financeChart"
-    ),
-    {
-      type:"bar",
-      data:{
-        labels:[
-          "T1","T2","T3","T4","T5","T6",
-          "T7","T8","T9","T10","T11","T12"
-        ],
-        datasets:[{
-          label:"Chi tiêu",
-          data:new Array(12).fill(0),
-          backgroundColor:"#8b5cf6"
-        }]
-      },
-      options:{
-        responsive:true,
-        plugins:{
-          legend:{
-            labels:{
-              color:"white"
-            }
-          }
-        },
-        scales:{
-          x:{
-            ticks:{
-              color:"white"
-            }
-          },
-          y:{
-            ticks:{
-              color:"white"
-            }
-          }
-        }
-      }
-    }
-  );
-
-function renderExpenses(){
-
-  const list =
-    document.getElementById(
-      "expenseList"
-    );
-
-  list.innerHTML = "";
-
-  let total = 0;
-
-  let monthly =
-    new Array(12).fill(0);
-
-  expenses.forEach((expense,index)=>{
-
-    total += expense.amount;
-
-    const month =
-      new Date(
-        expense.date
-      ).getMonth();
-
-    monthly[month] +=
-      expense.amount;
-
-    const li =
-      document.createElement("li");
-
-    li.className = "expense";
-
-    li.innerHTML = `
-      <span>
-        ${expense.date}
-        |
-        ${expense.amount.toLocaleString()} VNĐ
-        |
-        ${expense.note}
-      </span>
-
-      <button onclick="deleteExpense(${index})">
-        X
-      </button>
-    `;
-
-    list.appendChild(li);
-
-  });
-
-  document.getElementById(
-    "financeTotal"
-  ).textContent =
-    `Tổng năm: ${total.toLocaleString()} VNĐ`;
-
-  financeChart.data.datasets[0].data =
-    monthly;
-
-  financeChart.update();
-}
-
-/* =========================================================
-EXTRA DASHBOARD UPGRADE
-- streak
-- completion %
-========================================================= */
-function updateDashboardStats(){
-
-  const total =
-    tasks.length;
-
-  const done =
-    tasks.filter(
-      t=>t.done
-    ).length;
-
-  const percent =
-    total === 0
-      ? 0
-      : Math.round(
-          (done / total) * 100
-        );
-
-  const streakEl =
-    document.getElementById(
-      "dashboardCompletion"
-    );
-
-  if(streakEl){
-    streakEl.textContent =
-      `Completion: ${percent}%`;
-  }
-}
-/* =========================================================
-DAILY RESET
-- Task reset mỗi ngày mới
-========================================================= */
-function dailyTaskReset(){
-
-  const today =
-    new Date()
-      .toISOString()
-      .split("T")[0];
-
-  const lastVisit =
-    localStorage.getItem(
-      "lastVisitDate"
-    );
-
-  if(lastVisit !== today){
-
-    tasks = [];
-
-    localStorage.setItem(
-      "tasks",
-      JSON.stringify(tasks)
-    );
-
-    localStorage.setItem(
-      "lastVisitDate",
-      today
-    );
-  }
-}
-
-/* =========================================================
-INIT
-========================================================= */
-  const LINK_VERSION = "v1";
-if (localStorage.getItem("linkVersion") !== LINK_VERSION) {
-  ["scheduleLink","studyLink","examLink","documentLink","soundcloudLink"]
-    .forEach(k => localStorage.removeItem(k));
-  localStorage.setItem("linkVersion", LINK_VERSION);
-}
-dailyTaskReset();
-
-createPomodoroControls();
-
-renderTasks();
-
-updateChart();
-
-updateLevel();
-
-updateTimer();
-
-generateHeatmap();
-
-loadDailyQuote();
-
-/* Google sections + SoundCloud — load từ DEFAULT_LINKS */
-const containerMap = {
-  scheduleLink:  "scheduleContainer",
-  studyLink:     "studyContainer",
-  examLink:      "examContainer",
-  documentLink:  "documentContainer",
-};
-
-Object.entries(DEFAULT_LINKS).forEach(([key, link]) => {
-  if (!link) return;
-  if (key === "soundcloudLink") {
-    loadSoundCloud(link);
-  } else {
-    loadSheet(key, containerMap[key], link);
-  }
+function removeSheet(inputId,containerId){ localStorage.removeItem(inputId); document.getElementById(inputId).value=""; document.getElementById(containerId).innerHTML=""; }
+
+/* SOUNDCLOUD */
+function openSoundCloudHome(){ window.open("https://soundcloud.com","_blank"); }
+function openSoundCloudSearch(){ window.open("https://soundcloud.com/search","_blank"); }
+function openSoundCloudLiked(){ window.open("https://soundcloud.com/you/likes","_blank"); }
+function convertSoundCloudLink(url){ return `https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&color=%23E8698A&auto_play=false&visual=true`; }
+function saveSoundCloud(){ const link=document.getElementById("soundcloudLink").value.trim(); if(!link) return; localStorage.setItem("soundcloudLink",link); loadSoundCloud(); }
+function loadSoundCloud(savedLink){ if(!savedLink) savedLink=localStorage.getItem("soundcloudLink"); const container=document.getElementById("soundcloudContainer"); if(!savedLink) return; container.innerHTML=`<iframe height="500" scrolling="no" frameborder="no" allow="autoplay" src="${convertSoundCloudLink(savedLink)}"></iframe>`; document.getElementById("soundcloudLink").value=savedLink; }
+function removeSoundCloud(){ localStorage.removeItem("soundcloudLink"); document.getElementById("soundcloudLink").value=""; document.getElementById("soundcloudContainer").innerHTML=""; }
+
+/* FINANCE */
+let expenses = JSON.parse(localStorage.getItem("expenses"))||[];
+function saveExpenses(){ localStorage.setItem("expenses",JSON.stringify(expenses)); }
+function addExpense(){ const date=document.getElementById("expenseDate").value, amount=parseFloat(document.getElementById("expenseAmount").value), note=document.getElementById("expenseNote").value; if(!date||!amount) return; expenses.push({date,amount,note}); saveExpenses(); renderExpenses(); }
+function deleteExpense(index){ expenses.splice(index,1); saveExpenses(); renderExpenses(); }
+let financeChart = new Chart(document.getElementById("financeChart"),{
+  type:"bar",
+  data:{ labels:["T1","T2","T3","T4","T5","T6","T7","T8","T9","T10","T11","T12"], datasets:[{label:"Chi tiêu 🌸",data:new Array(12).fill(0),backgroundColor:"rgba(232,105,138,0.65)",borderRadius:10}] },
+  options:{ responsive:true, plugins:{legend:{labels:{color:"#6B3A50",font:{family:"Nunito",weight:"700"}}}}, scales:{x:{ticks:{color:"#B07090"}},y:{ticks:{color:"#B07090"}}} }
 });
+function renderExpenses(){
+  const list=document.getElementById("expenseList"); list.innerHTML=""; let total=0, monthly=new Array(12).fill(0);
+  expenses.forEach((e,i)=>{ total+=e.amount; monthly[new Date(e.date).getMonth()]+=e.amount; const li=document.createElement("li"); li.className="expense"; li.innerHTML=`<span>🌸 ${e.date} | ${e.amount.toLocaleString()} VNĐ | ${e.note}</span><button onclick="deleteExpense(${i})">✕</button>`; list.appendChild(li); });
+  document.getElementById("financeTotal").textContent=`🌸 Tổng năm: ${total.toLocaleString()} VNĐ`;
+  financeChart.data.datasets[0].data=monthly; financeChart.update();
+}
 
-/* Finance */
-renderExpenses();
+/* DAILY RESET */
+function dailyTaskReset(){
+  const today=new Date().toISOString().split("T")[0], lastVisit=localStorage.getItem("lastVisitDate");
+  if(lastVisit!==today){ tasks=[]; localStorage.setItem("tasks",JSON.stringify(tasks)); localStorage.setItem("lastVisitDate",today); }
+}
 
-/* Dashboard stats */
-updateDashboardStats();
+/* INIT */
+const LINK_VERSION="v1";
+if(localStorage.getItem("linkVersion")!==LINK_VERSION){ ["scheduleLink","studyLink","examLink","documentLink","soundcloudLink"].forEach(k=>localStorage.removeItem(k)); localStorage.setItem("linkVersion",LINK_VERSION); }
+dailyTaskReset();
+createPomodoroControls(); renderTasks(); updateChart(); updateLevel(); updateTimer(); generateHeatmap(); updateWeeklyChart(); loadDailyQuote();
+const containerMap={scheduleLink:"scheduleContainer",studyLink:"studyContainer",examLink:"examContainer",documentLink:"documentContainer"};
+Object.entries(DEFAULT_LINKS).forEach(([key,link])=>{ if(!link) return; if(key==="soundcloudLink") loadSoundCloud(link); else loadSheet(key,containerMap[key],link); });
+renderExpenses(); 
 
-/* =========================================================
-AUTO SAVE EVENTS
-========================================================= */
-document.addEventListener(
-  "click",
-  ()=>{
-    updateDashboardStats();
-  }
-);
-
-/* =========================================================
-END SCRIPT + BODY + HTML
-========================================================= */
+/* SCROLL LOCK */
+function lockScrollOnIframes(){ document.querySelectorAll('iframe').forEach(iframe=>{ if(iframe._scrollLocked) return; iframe._scrollLocked=true; iframe.addEventListener('mouseenter',()=>{document.body.style.overflow='hidden';}); iframe.addEventListener('mouseleave',()=>{document.body.style.overflow='';}); }); }
+lockScrollOnIframes();
+const observer=new MutationObserver(lockScrollOnIframes); observer.observe(document.body,{childList:true,subtree:true});
+document.addEventListener("click",()=>{ const total=tasks.length, done=tasks.filter(t=>t.done).length; });
 </script>
-
 </body>
-</html>   
+</html>
